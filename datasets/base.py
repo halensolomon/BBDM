@@ -1,16 +1,16 @@
 from torch.utils.data import Dataset
+import torch.load as load
 import torchvision.transforms as transforms
-from PIL import Image
+#from PIL import Image
 from pathlib import Path
 
-
 class ImagePathDataset(Dataset):
-    def __init__(self, image_paths, image_size=(256, 256), flip=False, to_normal=False):
+    def __init__(self, image_paths, image_size=(8192, 8192), flip=False, to_normal=False):
         self.image_size = image_size
         self.image_paths = image_paths
         self._length = len(image_paths)
         self.flip = flip
-        self.to_normal = to_normal # 是否归一化到[-1, 1]
+        self.to_normal = to_normal # Normalize to [-1, 1]
 
     def __len__(self):
         if self.flip:
@@ -26,18 +26,21 @@ class ImagePathDataset(Dataset):
         transform = transforms.Compose([
             transforms.RandomHorizontalFlip(p=p),
             transforms.Resize(self.image_size),
-            transforms.ToTensor()
         ])
 
         img_path = self.image_paths[index]
         image = None
         try:
-            image = Image.open(img_path)
+            image = load(img_path).unsqueeze(0)
+            
+            if image.is_sparse:
+                image = image.to_dense()
+            #image = Image.open(img_path)
         except BaseException as e:
             print(img_path)
 
-        if not image.mode == 'RGB':
-            image = image.convert('RGB')
+        # if not image.mode == 'RGB':
+        #     image = image.convert('RGB')
 
         image = transform(image)
 

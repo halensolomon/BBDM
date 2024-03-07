@@ -16,14 +16,31 @@ def calc_LPIPS(data_dir, gt_dir, num_samples=1):
     total_lpips_distance = 0
     for i in tqdm(range(total), total=total, smoothing=0.01):
         gt_name = os.path.join(gt_dir, f'{str(i)}.png')
-        gt_img = lpips.im2tensor(lpips.load_image(gt_name)).to(torch.device('cuda:0'))
+        gt_img = torch.load(gt_name).to(torch.device('cuda:0'))
+        # Need to change format from 1x1xHxW to Nx3xHxW
+        gt_img = gt_img.unsqueeze(0).unsqueeze(0)
+        gt_img.expand(num_samples, 3, gt_img.shape[2], gt_img.shape[3])
+        
+        # need to change this to allow .pt files
         for j in range(num_samples):
             if num_samples == 1:
-                img_name = os.path.join(os.path.join(data_dir, f'{str(i)}.png'))
+                img_name = os.path.join(os.path.join(data_dir, f'{str(i)}.pt'))
             else:
-                img_name = os.path.join(os.path.join(data_dir, str(i), f'output_{str(j)}.png'))
+                img_name = os.path.join(os.path.join(data_dir, str(i), f'output_{str(j)}.pt'))
 
-            img_calc = lpips.im2tensor(lpips.load_image(img_name)).to(torch.device('cuda:0'))
+            img_calc = torch.load(img_name).to(torch.device('cuda:0'))
+            current_lpips_distance = loss_fn.forward(gt_img, img_calc.unsqueeze(0).unsqueeze(0).expand(num_samples, 3, img_calc.shape[2], img_calc.shape[3]))
+            total_lpips_distance = total_lpips_distance + current_lpips_distance
+        
+        
+        
+        # for j in range(num_samples):
+        #     if num_samples == 1:
+        #         img_name = os.path.join(os.path.join(data_dir, f'{str(i)}.png'))
+        #     else:
+        #         img_name = os.path.join(os.path.join(data_dir, str(i), f'output_{str(j)}.png'))
+
+            img_calc = torch.load(img_name).to(torch.device('cuda:0'))
             current_lpips_distance = loss_fn.forward(gt_img, img_calc)
             total_lpips_distance = total_lpips_distance + current_lpips_distance
     avg_lpips_distance = total_lpips_distance / (total * num_samples)
@@ -45,10 +62,10 @@ def random_LPIPS(data_dir, gt_dir, num_samples=1):
     total_lpips_distance = 0
     for i in tqdm(range(total), total=total, smoothing=0.01):
         gt_name = os.path.join(gt_dir, f'{str(i)}.png')
-        gt_img = lpips.im2tensor(lpips.load_image(gt_name)).to(torch.device('cuda:0'))
+        gt_img = torch.load(gt_name).to(torch.device('cuda:0'))
         j = random.randint(0, num_samples-1)
         img_name = os.path.join(os.path.join(data_dir, str(i), f'output_{str(j)}.png'))
-        img_calc = lpips.im2tensor(lpips.load_image(img_name)).to(torch.device('cuda:0'))
+        img_calc = torch.load(img_name).to(torch.device('cuda:0'))
         current_lpips_distance = loss_fn.forward(gt_img, img_calc)
         total_lpips_distance = total_lpips_distance + current_lpips_distance
     avg_lpips_distance = total_lpips_distance / total

@@ -22,13 +22,13 @@ data:
     to_normal: True
     flip: True
   train:
-    batch_size: 8
+    batch_size: 2
     shuffle: True
   val:
-    batch_size: 8
+    batch_size: 2
     shuffle: True
   test:
-    batch_size: 8
+    batch_size: 2
     # shuffle: False
 
 model:
@@ -48,7 +48,7 @@ model:
 
   CondStageParams:
     n_stages: 4
-    in_channels: 3
+    in_channels: 1
     out_channels: 8
 
   VQGAN:
@@ -59,9 +59,9 @@ model:
       ddconfig:
         double_z: false
         z_channels: 8
-        resolution: 256
-        in_channels: 3
-        out_ch: 3
+        resolution: 8192
+        in_channels: 1
+        out_ch: 1
         ch: 128
         ch_mult: !!python/tuple
           - 1
