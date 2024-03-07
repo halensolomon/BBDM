@@ -53,7 +53,7 @@ model:
 
   VQGAN:
     params:
-      ckpt_path: 'results/VQGAN/CelebAMaskHQ-f16.pt'
+      ckpt_path: 'results/synthetic_data/LBBDM-f16/checkpoint/VQGAN-f16.pt'
       embed_dim: 8
       n_embed: 16384
       ddconfig:
