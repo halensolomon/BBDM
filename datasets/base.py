@@ -1,5 +1,4 @@
 from torch.utils.data import Dataset
-import torch.load as load
 import torchvision.transforms as transforms
 #from PIL import Image
 from pathlib import Path
@@ -31,7 +30,7 @@ class ImagePathDataset(Dataset):
         img_path = self.image_paths[index]
         image = None
         try:
-            image = load(img_path).unsqueeze(0)
+            image = torch.load(img_path).unsqueeze(0)
             
             if image.is_sparse:
                 image = image.to_dense()
