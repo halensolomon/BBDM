@@ -87,7 +87,7 @@ model: !!python/object:argparse.Namespace
     use_ema: true
   VQGAN: !!python/object:argparse.Namespace
     params: !!python/object:argparse.Namespace
-      ckpt_path: results/synthetic_data/LBBDM-f16/checkpoint/VQGAN-f16.pt
+      ckpt_path: results/synthetic_data/LBBDM-f16/checkpoint/coco-vqgan.ckpt
       ddconfig: !!python/object:argparse.Namespace
         attn_resolutions:
         - 16
