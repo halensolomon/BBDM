@@ -1,9 +1,7 @@
 name: BBDM
 channels:
-  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
-  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
-  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
-  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
+  - https://repo.anaconda.com/pkgs/main
+  - https://conda.anaconda.org/conda-forge/
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/
 dependencies:
   - _libgcc_mutex=0.1=main
@@ -67,6 +65,7 @@ dependencies:
     - protobuf==4.22.0
     - pyasn1==0.4.8
     - pyasn1-modules==0.2.8
+    - pytorch-fid == 0.3.0
     - pytorch-lightning==1.9.3
     - pywavelets==1.4.1
     - pyyaml==6.0
